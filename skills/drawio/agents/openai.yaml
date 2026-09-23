@@ -1,0 +1,7 @@
+interface:
+  display_name: "Draw.io"
+  short_description: "Create and export editable draw.io diagrams"
+  default_prompt: "Use $drawio to create or edit a native draw.io diagram."
+
+policy:
+  allow_implicit_invocation: true

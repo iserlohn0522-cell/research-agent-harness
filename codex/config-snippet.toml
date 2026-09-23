@@ -1,0 +1,6 @@
+# Merge into ~/.codex/config.toml. Add only these keys; keep everything already in that file.
+# If an [agents] table already exists, put the key inside it instead of adding a second table.
+
+[agents]
+# At most two subagents at once (the delegation guide usually uses one).
+max_concurrent_threads_per_session = 2
