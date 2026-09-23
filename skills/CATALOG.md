@@ -63,7 +63,7 @@
 
 | 技能 | 做什么 | 来源：仓库 → 文件夹 | 许可 | Claude Code 插件 |
 |---|---|---|---|---|
-| drawio | 画可编辑的 draw.io 图：流程图、架构图、时序图等 | 本仓库 `skills/drawio` | 本仓库作者所写，没有单独的许可文件 | — |
+| drawio | 画可编辑的 draw.io 图：流程图、架构图、时序图等 | 本仓库 `skills/drawio` | MIT | — |
 | frontend-design、web-artifacts-builder、webapp-testing | 做网页界面；用 Playwright 测试本地网页 | anthropics/skills → `skills/<名字>` | Apache-2.0 | `example-skills@anthropic-agent-skills` |
 | ui-ux-pro-max | 界面设计参考：配色、字体、组件风格 | nextlevelbuilder/ui-ux-pro-max-skill → `.claude/skills/ui-ux-pro-max` | MIT | `ui-ux-pro-max@ui-ux-pro-max-skill` |
 | canvas-design、algorithmic-art、theme-factory | 海报和示意图、生成式图案、统一配色主题 | anthropics/skills → `skills/<名字>` | Apache-2.0 | `example-skills@anthropic-agent-skills` |
