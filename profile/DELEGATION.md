@@ -9,8 +9,8 @@ Codex 与 Claude Code 共用。由 `{{GUIDES_DIR}}/AGENTS.md` 指向。当独立
 | 角色 | Codex | Claude Code | 合适的工作 |
 | --- | --- | --- | --- |
 | `luna_worker` | `gpt-6-luna`，推理强度按任务定：清点、提取、格式核对、日志摘要用 low；有边界的分析、实现、普通独立评审用 medium（角色默认）；较难的有界分析用 high 或 xhigh | Sonnet，medium；纯机械活可指定 haiku，较难的有界分析可指定 opus | 机械杂务，有边界的多步分析、实现、验证，普通独立评审（评审保持只读） |
-| `critical_reviewer` | `gpt-6-astra`，high | Fable，high | 重大的研究或架构判断、关键假设和反例审查，或对卡住的推理问题做一次独立重读；只写自己的报告文件 |
-| `professional_reviewer` | `gpt-6-astra`，max | Fable，max | 极难且出错代价很高的判断，或 `critical_reviewer` 解决不了的问题；只写自己的报告文件，按需使用 |
+| `critical_reviewer` | `gpt-6-astra`，high | Opus，high | 重大的研究或架构判断、关键假设和反例审查，或对卡住的推理问题做一次独立重读；只写自己的报告文件 |
+| `professional_reviewer` | `gpt-6-astra`，max | Opus，max | 极难且出错代价很高的判断，或 `critical_reviewer` 解决不了的问题；只写自己的报告文件，按需使用 |
 
 账户里没有表中的模型时，换成同档位的：小而快、主力、最强。
 

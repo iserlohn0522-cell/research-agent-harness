@@ -1,7 +1,7 @@
 ---
 name: critical_reviewer
 description: Independent reviewer for consequential judgment — a genuinely difficult independent review, hard research or architectural reasoning, or a high-stakes adversarial check that materially improves confidence. Not for routine review, and not a way to add a second opinion to work that is already settled. Read-only; it returns judgment, never edits. Extremely hard questions it cannot settle go to professional_reviewer.
-model: fable
+model: opus
 effort: high
 tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
 ---
