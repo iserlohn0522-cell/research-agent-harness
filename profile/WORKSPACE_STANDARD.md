@@ -1,6 +1,6 @@
 # Workspace Standard
 
-Shared by Codex and Claude Code. Pointed to by `{{GUIDES_DIR}}/AGENTS.md`; Claude imports it through `~/.claude/CLAUDE.md`. Version 1.2, 2026-09-23. Script and templates: `{{GUIDES_DIR}}/workspace-standard/`.
+Shared by Codex and Claude Code. Pointed to by `{{GUIDES_DIR}}/AGENTS.md`; Claude imports it through `~/.claude/CLAUDE.md`. Version 1.3, 2026-09-23. Script and templates: `{{GUIDES_DIR}}/workspace-standard/`.
 
 A workspace is a directory the user gives agents to work in. This standard lets any agent, thread or subagent find the rules, the current state and the place for a new file from the files alone, without the previous session.
 
@@ -42,12 +42,12 @@ Initialization adds files. It never moves, renames or deletes anything.
 - Required: `AGENTS.md`, `CLAUDE.md`, `START_HERE.md`, `work/`, `log/`. Create the rest when first needed. Hidden folders (`.git`, `.venv` and the like), generated folders (`node_modules`, `build`, `dist`, `__pycache__`, `venv`) and common project files (README, LICENSE, build, package and environment files) need nothing. Declare any other top-level folder or file in the layout section of `AGENTS.md` as a line starting with ``- `name/`:`` or ``- `file.ext`:``; several names may share one line, as in ``- `old-a/`, `old-b/`: earlier tasks``.
 - Keep the rules in the root `AGENTS.md`. Codex also loads an `AGENTS.md` in a subfolder when it works inside that subfolder, so a subfolder gets its own only when the user makes it a separate project: its `AGENTS.md` contains `Workspace-Root: .`, it has its own `CLAUDE.md`, `START_HERE.md`, `work/` and `log/`, and the parent lists it under `## Child workspaces` as ``- `path/`: purpose``.
 - `START_HERE.md` is the project's single entry. Update it when the state or the next step changes. Task READMEs and result or status pages it links to are fine; do not create other entry or handoff files.
-- A task folder is named by date and a short lowercase hyphenated English slug, with the stage when there is one (`2026-09-22-s3-ablation-batch1`). Its README gives goal and end point, inputs, method, result with fixed paths, and status. The task's scripts, intermediate outputs, run logs and scratch files stay inside it. A workspace that will only ever hold a few tasks may drop the month level.
+- A task folder is named by date and a short lowercase hyphenated English slug, with the stage when there is one (`2026-09-22-s3-ablation-batch1`). Its README gives goal and end point, inputs, method, result with fixed paths, and status. The task's scripts, intermediate outputs, run logs and scratch files stay inside it; subagent reports go in its `agents/` and messages to or from other threads in its `messages/`. A workspace that will only ever hold a few tasks may drop the month level.
 - A record entry starts with the heading `## YYYY-MM-DD <what> [<writer>]` (writer `Codex`, `Claude` …), followed by one to three bullets: what was done or decided, the result, the task folder or file. Decisions are recorded there when made; `START_HERE.md` carries the ones still in force.
 
 ## Working
 
-- Unless the workspace's layout says otherwise, a new file goes into the current task folder. `python {{GUIDES_DIR}}/workspace-standard/workspace.py task <dir> <slug>` creates today's task folder with its README.
+- Unless the workspace's layout says otherwise, a new file goes into the current task folder. `python {{GUIDES_DIR}}/workspace-standard/workspace.py task <dir> <slug>` creates today's task folder with its README; `workspace.py keep <task-dir> <slug> --claude-agent <id>` (or `--codex-thread <id>`) saves a finished subagent's or thread's brief and final reply into the task's `agents/`.
 - A lasting product that later tasks extend or reuse (literature notes, a dataset, a manuscript) lives in its layout folder (`refs/`, `data/processed/`, `docs/`, `deliverables/`) or a folder declared in `AGENTS.md`, never inside one task's folder. A small change to it needs no task folder, only a record entry.
 - One writer per shared file: `START_HERE.md`, `docs/PLAN.md` and decisions belong to the main thread (the only thread, when there is one); a task folder belongs to the agent doing that task; a lasting product is changed by one task at a time; subagents write only where their parent says. Everyone else reads.
 - Every change to the workspace, however small, ends with its record entry, a complete README when the task has a folder, and an updated `START_HERE.md` when the state or the next step changed.

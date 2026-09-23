@@ -1,26 +1,29 @@
 #!/usr/bin/env python3
-"""Helper for the workspace standard (WORKSPACE_STANDARD.md in the folder above this script, v1.2).
+"""Helper for the workspace standard (WORKSPACE_STANDARD.md in the folder above this script, v1.3).
 
   init   <dir> [--by NAME] [--name NAME] [--migrate] [--allow-git] [--dry-run]
   task   <dir> <slug> [--by NAME] [--date YYYY-MM-DD]
+  keep   <task-dir> <slug> (--claude-agent ID | --codex-thread ID)
   check  [<dir>]
   survey <dir>
 
-init and task only add files: they never overwrite, move or delete anything
+init, task and keep only add files: they never overwrite, move or delete anything
 (init's one edit to an existing file is putting @AGENTS.md at the top of CLAUDE.md).
-check and survey only report.
+keep copies a subagent's or thread's brief and final reply from its stored transcript
+into <task-dir>/agents/. check and survey only report.
 """
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import fnmatch
+import json
 import os
 import re
 import sys
 from pathlib import Path
 
-STANDARD_VERSION = "1.2"
+STANDARD_VERSION = "1.3"
 STANDARD_MARK = "WORKSPACE_STANDARD.md"
 TODO_MARK = "[[TODO"
 TEMPLATES = Path(__file__).resolve().parent / "templates"
@@ -401,6 +404,97 @@ def cmd_task(a: argparse.Namespace) -> int:
     return 0
 
 
+# ---------------------------------------------------------------- keep
+
+def text_of(message: dict) -> str:
+    content = message.get("content")
+    if isinstance(content, str):
+        return content
+    return "".join(c.get("text", "") for c in content or [] if isinstance(c, dict) and c.get("type") == "text")
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    records = []
+    with path.open(encoding="utf-8", errors="replace") as fh:
+        for line in fh:
+            try:
+                records.append(json.loads(line))
+            except ValueError:
+                continue
+    return records
+
+
+def claude_agent_record(agent_id: str) -> tuple[Path, str, str, str] | None:
+    """Transcript path, brief, final reply and model of a Claude Code subagent."""
+    found = sorted((Path.home() / ".claude" / "projects").glob(f"*/*/subagents/agent-{agent_id}.jsonl"),
+                   key=lambda p: p.stat().st_mtime)
+    if not found:
+        return None
+    records = read_jsonl(found[-1])
+    brief = next((text_of(r.get("message") or {}) for r in records if r.get("type") == "user"
+                  and text_of(r.get("message") or {})), "")
+    final = next((r for r in reversed(records) if r.get("type") == "assistant"
+                  and text_of(r.get("message") or {})), None)
+    if final is None:
+        return None
+    return found[-1], brief, text_of(final["message"]), (final["message"].get("model") or "")
+
+
+def codex_thread_record(thread_id: str) -> tuple[Path, str] | None:
+    """Rollout path and last agent message of a Codex thread or subagent."""
+    home_dir = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex")
+    found = [p for sub in ("sessions", "archived_sessions") if (home_dir / sub).is_dir()
+             for p in (home_dir / sub).rglob(f"rollout-*-{thread_id}.jsonl")]
+    if not found:
+        return None
+    path = max(found, key=lambda p: p.stat().st_mtime)
+    finals = [r["payload"].get("last_agent_message") for r in read_jsonl(path)
+              if r.get("type") == "event_msg" and (r.get("payload") or {}).get("type") == "task_complete"
+              and r["payload"].get("last_agent_message")]
+    return (path, finals[-1]) if finals else None
+
+
+def cmd_keep(a: argparse.Namespace) -> int:
+    task = Path(a.dir).expanduser().resolve()
+    root = find_root(task)
+    if root is None or not (within(task, root / "work") and task != root / "work") or not task.is_dir():
+        print(f"REFUSED: {task} is not a task folder under a workspace's work/; give the current task folder.")
+        return 2
+    slug = slugify(a.slug)
+    if not slug:
+        print("REFUSED: the slug needs ASCII letters or digits, e.g. reviewer-barrier-check.")
+        return 2
+    now = dt.datetime.now()
+    if a.claude_agent:
+        got = claude_agent_record(a.claude_agent)
+        if got is None:
+            print(f"NOT FOUND: no finished Claude Code subagent transcript for {a.claude_agent}.")
+            return 1
+        source_path, brief, result, model = got
+        source = f"Claude Code 子代理 {a.claude_agent}" + (f"（{model}）" if model else "")
+    else:
+        got = codex_thread_record(a.codex_thread)
+        if got is None:
+            print(f"NOT FOUND: no finished Codex thread or subagent rollout for {a.codex_thread}.")
+            return 1
+        source_path, result = got
+        brief = "Codex 不在本地保存子代理收到的任务说明；需要时见派发它的主线程。"
+        source = f"Codex 线程 {a.codex_thread}"
+    target = task / "agents" / f"{now:%Y-%m-%d-%H%M}-{slug}.md"
+    problem = validate_targets(root, [(task / "agents", True), (target, False)])
+    if problem:
+        print(f"REFUSED: {problem}")
+        return 2
+    if target.exists():
+        print(f"EXISTS: {target}; choose another slug.")
+        return 1
+    target.parent.mkdir(exist_ok=True)
+    write_new(target, f"# {slug}\n\n- 保存于：{now:%Y-%m-%d %H:%M}\n- 来源：{source}\n- 原始记录：`{source_path}`\n\n"
+                      f"## 任务说明\n\n{brief.strip()}\n\n## 结果\n\n{result.strip()}\n", False)
+    print(target)
+    return 0
+
+
 # ---------------------------------------------------------------- check and survey
 
 class Report:
@@ -630,12 +724,18 @@ def main(argv: list[str] | None = None) -> int:
     pt.add_argument("slug", help="short English name, e.g. relax-batch1")
     pt.add_argument("--by", help="who does the task, e.g. Codex or Claude")
     pt.add_argument("--date", help="YYYY-MM-DD, default today")
+    pk = sub.add_parser("keep", help="save a subagent's or thread's brief and final reply into <task-dir>/agents/")
+    pk.add_argument("dir", help="the current task folder")
+    pk.add_argument("slug", help="short English name, e.g. reviewer-barrier-check")
+    src = pk.add_mutually_exclusive_group(required=True)
+    src.add_argument("--claude-agent", help="agent ID of a finished Claude Code subagent")
+    src.add_argument("--codex-thread", help="thread ID of a finished Codex subagent or thread")
     pc = sub.add_parser("check", help="report what is out of place (read-only)")
     pc.add_argument("dir", nargs="?", default=".")
     ps = sub.add_parser("survey", help="one line per workspace in a folder of projects (read-only)")
     ps.add_argument("dir")
     a = p.parse_args(argv)
-    return {"init": cmd_init, "task": cmd_task, "check": cmd_check, "survey": cmd_survey}[a.cmd](a)
+    return {"init": cmd_init, "task": cmd_task, "keep": cmd_keep, "check": cmd_check, "survey": cmd_survey}[a.cmd](a)
 
 
 if __name__ == "__main__":

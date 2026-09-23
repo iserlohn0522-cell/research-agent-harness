@@ -1,6 +1,10 @@
 # Merge into ~/.codex/config.toml. Add only these keys; keep everything already in that file.
-# If an [agents] table already exists, put the key inside it instead of adding a second table.
+# If an [agents] table already exists, put the keys inside it instead of adding a second table.
 
 [agents]
 # At most two subagents at once (the delegation guide usually uses one).
 max_concurrent_threads_per_session = 2
+# Only for subagents spawned without a named role; the role files set their own model.
+# Replace the model with the closest one your account offers if this one is missing.
+default_subagent_model = "gpt-6-luna"
+default_subagent_reasoning_effort = "medium"

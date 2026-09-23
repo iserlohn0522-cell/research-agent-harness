@@ -52,13 +52,13 @@ Copy these files with the placeholders replaced:
 ## Step 5 — Codex (skip if not in use)
 
 - Copy `codex/agents/*.toml` into `<Codex home>/agents/` with the placeholders replaced. If an existing file there has the same `name`, ask before replacing it.
-- The role files name the author's models: `gpt-5.6-luna`, `gpt-5.6-terra` and `gpt-6-astra`. Find which models the user's Codex offers (the model list in the app, or the `/model` command). Replace any missing one with the closest tier — small and fast, balanced, or strongest — and tell the user what you chose.
-- Merge `codex/config-snippet.toml` into `<Codex home>/config.toml`: add only its one key, inside the existing `[agents]` table if there is one.
+- The role files name the author's models: `gpt-6-luna` for `luna_worker` and `gpt-6-astra` for the two reviewers. Find which models the user's Codex offers (the model list in the app, or the `/model` command). Replace any missing one with the closest tier — small and fast, or strongest — and tell the user what you chose.
+- Merge `codex/config-snippet.toml` into `<Codex home>/config.toml`: add only its keys, inside the existing `[agents]` table if there is one, with the same model check for `default_subagent_model`.
 - Tell the user to restart Codex if it is running, so the new rules and roles load.
 
 ## Step 6 — Claude Code (skip if not in use)
 
-- Put `claude/GLOBAL_CLAUDE.md` into `~/.claude/CLAUDE.md` as the user chose in step 2, with `{{GUIDES_IMPORT}}` replaced. For "merge", append the import line and the "Claude Code additions" section to the end of their file.
+- Put `claude/GLOBAL_CLAUDE.md` into `~/.claude/CLAUDE.md` as the user chose in step 2, with both placeholders replaced. For "merge", append the import line and the "Claude Code additions" section to the end of their file.
 - Copy `claude/agents/*.md` into `~/.claude/agents/`. If an existing agent has the same `name`, ask before replacing it.
 - New sessions load the result; the `/memory` command in Claude Code shows which files were loaded.
 
@@ -72,8 +72,7 @@ Copy these files with the placeholders replaced:
 ## Step 8 — Verify and report
 
 - Confirm that no `{{` placeholder remains in any installed file.
-- Codex: in a new session, ask it to list the custom subagent roles it can spawn; `luna_clerk`, `terra_worker`, `critical_reviewer` and `professional_reviewer` should appear.
-- Claude Code: in a new session, ask which subagents are available; `luna_clerk`, `terra_worker` and `critical_reviewer` should appear.
+- Codex and Claude Code: in a new session, ask it to list the custom subagents it can use; `luna_worker`, `critical_reviewer` and `professional_reviewer` should appear in each.
 - Report to the user in Chinese: what was installed where, the backups, which model each Codex role uses, which skills were installed, and how to undo (restore the `.bak-*` files and delete the installed files). Suggest a first try: open a project folder and say “按工作区规范初始化这个项目”.
 
 ## Updating later
