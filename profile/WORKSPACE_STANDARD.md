@@ -1,6 +1,6 @@
 # Workspace Standard
 
-Shared by Codex and Claude Code. Pointed to by `{{GUIDES_DIR}}/AGENTS.md`; Claude imports it through `~/.claude/CLAUDE.md`. Version 1.3, 2026-09-23. Script and templates: `{{GUIDES_DIR}}/workspace-standard/`.
+Shared by Codex and Claude Code. Pointed to by `{{GUIDES_DIR}}/AGENTS.md`; read it when initializing, checking or restructuring a workspace. Version 1.3, 2026-09-23. Script and templates: `{{GUIDES_DIR}}/workspace-standard/`.
 
 A workspace is a directory the user gives agents to work in. This standard lets any agent, thread or subagent find the rules, the current state and the place for a new file from the files alone, without the previous session.
 
