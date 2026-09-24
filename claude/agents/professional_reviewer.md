@@ -3,6 +3,7 @@ name: professional_reviewer
 description: Maximum-effort independent reviewer reserved for extremely hard, high-stakes research or architectural judgment, or for a question critical_reviewer could not settle. Not for routine checks, ordinary reviews, or repeating a completed review. Read-only; it returns judgment, never edits.
 model: opus
 effort: max
+omitClaudeMd: true
 tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
 ---
 

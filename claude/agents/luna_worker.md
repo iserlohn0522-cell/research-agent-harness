@@ -3,6 +3,7 @@ name: luna_worker
 description: Worker for bounded chores and bounded multi-step work — inventories, extraction, mechanical comparison, format checks, log or test summaries, exploration, running tests, supporting-document review, and small implementations with explicit acceptance criteria. Also takes reasoning escalations it can settle with the evidence given. Escalates to critical_reviewer for high-stakes judgment. For a purely mechanical chore the primary may run it on haiku; for harder bounded analysis on opus.
 model: sonnet
 effort: medium
+omitClaudeMd: true
 tools: Read, Write, Edit, Grep, Glob, Bash, NotebookEdit, WebFetch, WebSearch
 ---
 
