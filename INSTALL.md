@@ -41,7 +41,7 @@ Copy these files with the placeholders replaced:
 | From this repository | To |
 |---|---|
 | `profile/GLOBAL_AGENTS.md` | `GUIDES_DIR/AGENTS.md`. When GUIDES_DIR is the Codex home and an `AGENTS.md` is already there, apply the step 2 choice to it (for "guides only", leave it unchanged). In a Claude-Code-only install the file is new here, and the step 2 choice applies to `~/.claude/CLAUDE.md` in step 6. |
-| `profile/REPLY_STYLE.md`, `profile/HANDOFF_GUIDE.md`, `profile/THREAD_SPLIT_GUIDE.md`, `profile/DELEGATION.md`, `profile/AUTHORIZATION_TEMPLATE.md`, `profile/WORKSPACE_STANDARD.md` | `GUIDES_DIR/` |
+| `profile/REPLY_STYLE.md`, `profile/HANDOFF_GUIDE.md`, `profile/THREAD_SPLIT_GUIDE.md`, `profile/DELEGATION.md`, `profile/TASK_BRIEF_TEMPLATE.md`, `profile/REPLY_STYLE_EXAMPLES.md`, `profile/AUTHORIZATION_TEMPLATE.md`, `profile/WORKSPACE_STANDARD.md` | `GUIDES_DIR/` |
 | `profile/workspace-standard/` (the helper script and its templates) | `GUIDES_DIR/workspace-standard/`. The templates contain `{{GUIDES_DIR}}` too: replace it there as well, or every project the helper creates later will carry the literal placeholder. |
 
 - For "guides only", tell the user their global rules do not point to the guides yet, and offer the one line they can add later.

@@ -23,7 +23,7 @@ import re
 import sys
 from pathlib import Path
 
-STANDARD_VERSION = "1.3"
+STANDARD_VERSION = "1.4"
 STANDARD_MARK = "WORKSPACE_STANDARD.md"
 TODO_MARK = "[[TODO"
 TEMPLATES = Path(__file__).resolve().parent / "templates"

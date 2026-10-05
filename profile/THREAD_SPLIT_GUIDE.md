@@ -26,3 +26,5 @@ Codex 与 Claude Code 共用。两个对话分担一个项目时读。
 
 - 执行对话写自己的任务文件夹和 README（当前状态、结果的固定路径）；主对话写研究决定和 `START_HERE.md`。两边读对方的入口，不为让对方更新记录而发消息。
 - 常设授权书由用户定，放在项目的 `docs/AUTHORIZATION.md`；模板见 `{{GUIDES_DIR}}/AUTHORIZATION_TEMPLATE.md`。
+
+派发时按 `{{GUIDES_DIR}}/TASK_BRIEF_TEMPLATE.md` 明确必需输入和读取范围。已完整提供且未变的 AGENTS 视为已读，不重复加载；收尾只核对受影响状态与证据。

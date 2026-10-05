@@ -16,7 +16,7 @@ Shared by Codex and Claude Code. A project's own rules, method files and authori
 ## Workspaces
 
 - On arrival, read the workspace's `START_HERE.md`. A directory without a workspace is initialized per `WORKSPACE_STANDARD.md` before other work; an existing one is restructured only when the user asks.
-- New files go into the current task folder. Each shared file has one writer, and the entry page, plan and decisions belong to the main thread. Every change ends with a record entry and a complete task README, and `START_HERE.md` changes whenever the state or the next step does.
+- New files go into the current task folder. Each shared file has one writer; the entry page, plan and decisions belong to the main thread. Record substantive decisions, results, failures and blockers once, with evidence. Keep task READMEs current and `START_HERE.md` a short index; update affected pointers when state or next steps change. At closure, handoff or a material method/authorization/result change, check the affected state against evidence, live constraints and next steps. A later log never overrides a frozen method or authorization by date alone.
 
 ## Delegation and threads
 
@@ -28,5 +28,5 @@ Shared by Codex and Claude Code. A project's own rules, method files and authori
 
 ## Context and replies
 
-- Keep context lean: leave large logs, dumps and images in files and read back only what you need, record what you extract so no one has to open it again, and do not re-read unchanged files. When a stage ends or the thread has been compacted repeatedly, suggest a new thread and hand off per `HANDOFF_GUIDE.md`.
+- Keep context lean: leave large logs, dumps and images in files, read only what the task needs, and record extracted facts for reuse. Fully supplied, unchanged rules count as read; reload only if missing, scope changes or an update is indicated. Review project rules at stage boundaries or material tool, permission or workflow changes; retain stable constraints and retire obsolete clauses only with evidence. When a stage ends or the thread has been compacted repeatedly, suggest a new thread and hand off per `HANDOFF_GUIDE.md`.
 - Talk to the user in plain Chinese: answer the question asked, explain what results mean and why, translate project labels, keep claims calibrated, and leave bookkeeping in files. Read `REPLY_STYLE.md` before the first substantive report of a session.
